@@ -12,12 +12,8 @@
         <Style TargetType="Border">
             <Setter Property="CornerRadius" Value="10"/>
         </Style>
-        <Style TargetType="TextBlock">
+        <Style x:Key="styleForPosition" TargetType="TextBlock">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Salary, Converter={StaticResource ValueToIntConverter}}" Value="1000">
-                    <Setter Property="FontWeight" Value="Bold"/>
-                    <Setter Property="FontStyle" Value="Italic"/>
-                </DataTrigger>
                 <DataTrigger Binding="{Binding Position, Converter={StaticResource PositionForecolorConverter}}" Value="директор">
                     <Setter Property="Foreground" Value="Green"/>
                 </DataTrigger>
@@ -26,7 +22,15 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        
+
+        <Style x:Key="styleForSalary" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Salary, Converter={StaticResource ValueToIntConverter}}" Value="1000">
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="FontStyle" Value="Italic"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid>
         <ListView x:Name="employeesTable">
@@ -48,8 +52,20 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding Path=Name}"/>
-                    <GridViewColumn x:Name="_position" Header="Должность" DisplayMemberBinding="{Binding Path=Position}"/>
-                    <GridViewColumn x:Name="_salary" Header="Заработная плата" DisplayMemberBinding="{Binding Path=Salary}"/>
+                    <GridViewColumn Header="Должность">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Position}" Style="{StaticResource styleForPosition}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Заработная плата">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Salary}" Style="{StaticResource styleForSalary}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
